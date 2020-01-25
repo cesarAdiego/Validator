@@ -5,13 +5,13 @@ namespace Validator.Validator
 {
     public class AbstractValidator<TEntity>
     {
-        public List<Rule<TEntity>> Rules { get; set; }
+        public List<Rule<TEntity, object>> Rules { get; set; }
 
         private TEntity _entity { get; set; }
 
         public AbstractValidator(TEntity entity) 
         {
-            Rules = new List<Rule<TEntity>>();
+            Rules = new List<Rule<TEntity, object>>();
             _entity = entity;
         }
 
@@ -27,10 +27,8 @@ namespace Validator.Validator
             return result;
         }
 
-        public void AddRule(Func<TEntity, bool> func)
+        public void AddRule(Rule<TEntity, object> rule)
         {
-            var rule = new Rule<TEntity>(func);
-            
             Rules.Add(rule);
         }
     }
