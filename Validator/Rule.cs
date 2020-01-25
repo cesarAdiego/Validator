@@ -26,59 +26,70 @@ namespace Validator.Validator
             _singleParam = func;
         }
 
-        public bool Validate(TIn entity)
+        public ValidationResult Validate(TIn entity)
         {
-            var result = true;
+            var result = new ValidationResult();
 
             if(CheckIfNull)
             {
-                result = result && ValidateParamIsNotNull(entity);
+                ValidateParamIsNotNull(entity, result);
             }
 
             if(CheckIsBiggerThan)
             {
-                result = result && ValidateParamIsBiggerThan(entity);
+                ValidateParamIsBiggerThan(entity, result);
             }
 
             if(CheckIsLesserThan)
             {
-                result = result && ValidateParamIsLesserThan(entity);
+                ValidateParamIsLesserThan(entity, result);
             }
 
             if(CheckAreEqual)
             {
-                result = result && ValidateParamAreEqual(entity);
+                ValidateParamAreEqual(entity, result);
             }
 
             return result;
         }
 
-        private bool ValidateParamIsNotNull(TIn entity)
+        private void ValidateParamIsNotNull(TIn entity, ValidationResult validationResult)
         {
             var value = _singleParam.Invoke(entity);
 
-            return value != null || value != default;
+            if(EqualityComparer<TOut>.Default.Equals(value, default))
+            {
+                validationResult.AddValidation(_singleParam.Target.ToString(), "Is null");
+            }
         }
 
-        private bool ValidateParamIsBiggerThan(TIn entity)
+        private void ValidateParamIsBiggerThan(TIn entity, ValidationResult validationResult)
         {
             var value = _singleParam.Invoke(entity);
 
-            return Comparer<TOut>.Default.Compare(value, BiggerThanObject) >= 0;
+            if(!(Comparer<TOut>.Default.Compare(value, BiggerThanObject) >= 0))
+            {
+                validationResult.AddValidation(_singleParam.Target.ToString(), "Is not greater");
+            }
         }
 
-        private bool ValidateParamIsLesserThan(TIn entity)
+        private void ValidateParamIsLesserThan(TIn entity, ValidationResult validationResult)
         {
             var value = _singleParam.Invoke(entity);
 
-            return Comparer<TOut>.Default.Compare(value, LesserThanObject) <= 0;
+            if(!(Comparer<TOut>.Default.Compare(value, LesserThanObject) <= 0))
+            {
+                validationResult.AddValidation(_singleParam.Target.ToString(), "Is not less");
+            }
         }
 
-        private bool ValidateParamAreEqual(TIn entity)
+        private void ValidateParamAreEqual(TIn entity, ValidationResult validationResult)
         {
             var value = _singleParam.Invoke(entity);
 
-            return Comparer<TOut>.Default.Compare(value, EqualObject) == 0;
+            if(Comparer<TOut>.Default.Compare(value, EqualObject) != 0) {
+                validationResult.AddValidation(_singleParam.Target.ToString(), "Are not equal");
+            }
         }
     }
 }

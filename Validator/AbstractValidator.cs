@@ -15,16 +15,18 @@ namespace Validator.Validator
             _entity = entity;
         }
 
-        public bool Validate()
+        public ValidationResult Validate()
         {
-            bool result = true;
+            var validationResult = new ValidationResult();
 
             foreach(var rule in Rules)
             {
-                result = result && rule.Validate(_entity);
+                var result = rule.Validate(_entity);
+
+                validationResult.MergeWith(result);
             }
 
-            return result;
+            return validationResult;
         }
 
         public void AddRule(Rule<TEntity, object> rule)
