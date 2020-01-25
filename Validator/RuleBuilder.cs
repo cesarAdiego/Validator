@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 namespace Validator.Validator
 {
@@ -6,7 +7,7 @@ namespace Validator.Validator
     {
         private Rule<TIn, object> Rule { get; set; }
 
-        private RuleBuilder(Func<TIn, object> func) 
+        private RuleBuilder(Expression<Func<TIn, object>> func) 
         {
             Rule = new Rule<TIn, object>(func);
         }
@@ -39,7 +40,7 @@ namespace Validator.Validator
             return this;
         }
 
-        public static RuleBuilder<TIn> RuleFor(Func<TIn, object> func)
+        public static RuleBuilder<TIn> RuleFor(Expression<Func<TIn, object>> func)
         {
             return new RuleBuilder<TIn>(func);
         }

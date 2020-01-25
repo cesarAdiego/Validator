@@ -1,11 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Validator.Validator
 {
     public class Rule<TIn, TOut>
     {
-        private Func<TIn, TOut> _singleParam { get; set; }
+        private Expression<Func<TIn, TOut>> _singleParam { get; set; }
+
+        private string _paramName { get; set; }
+
+        private string ParamName
+        {
+            get
+            {
+                if(_paramName == null)
+                {
+                    _paramName = (_singleParam.Body as MemberExpression).Member.Name;
+                }
+
+                return _paramName;
+            }
+        }
 
         public bool CheckIfNull { get; set; }
 
@@ -21,7 +37,7 @@ namespace Validator.Validator
 
         public TOut EqualObject { get; set; }
 
-        public Rule(Func<TIn, TOut> func)
+        public Rule(Expression<Func<TIn, TOut>> func)
         {
             _singleParam = func;
         }
@@ -29,66 +45,59 @@ namespace Validator.Validator
         public ValidationResult Validate(TIn entity)
         {
             var result = new ValidationResult();
+            var value = _singleParam.Compile().Invoke(entity);
 
             if(CheckIfNull)
             {
-                ValidateParamIsNotNull(entity, result);
+                ValidateParamIsNotNull(value, result);
             }
 
             if(CheckIsBiggerThan)
             {
-                ValidateParamIsBiggerThan(entity, result);
+                ValidateParamIsBiggerThan(value, result);
             }
 
             if(CheckIsLesserThan)
             {
-                ValidateParamIsLesserThan(entity, result);
+                ValidateParamIsLesserThan(value, result);
             }
 
             if(CheckAreEqual)
             {
-                ValidateParamAreEqual(entity, result);
+                ValidateParamAreEqual(value, result);
             }
 
             return result;
         }
 
-        private void ValidateParamIsNotNull(TIn entity, ValidationResult validationResult)
+        private void ValidateParamIsNotNull(TOut value, ValidationResult validationResult)
         {
-            var value = _singleParam.Invoke(entity);
-
             if(EqualityComparer<TOut>.Default.Equals(value, default))
             {
-                validationResult.AddValidation(_singleParam.Target.ToString(), "Is null");
+                validationResult.AddValidation(ParamName, "Is null");
             }
         }
 
-        private void ValidateParamIsBiggerThan(TIn entity, ValidationResult validationResult)
+        private void ValidateParamIsBiggerThan(TOut value, ValidationResult validationResult)
         {
-            var value = _singleParam.Invoke(entity);
-
             if(!(Comparer<TOut>.Default.Compare(value, BiggerThanObject) >= 0))
             {
-                validationResult.AddValidation(_singleParam.Target.ToString(), "Is not greater");
+                validationResult.AddValidation(ParamName, "Is not greater");
             }
         }
 
-        private void ValidateParamIsLesserThan(TIn entity, ValidationResult validationResult)
+        private void ValidateParamIsLesserThan(TOut value, ValidationResult validationResult)
         {
-            var value = _singleParam.Invoke(entity);
-
             if(!(Comparer<TOut>.Default.Compare(value, LesserThanObject) <= 0))
             {
-                validationResult.AddValidation(_singleParam.Target.ToString(), "Is not less");
+                validationResult.AddValidation(ParamName, "Is not less");
             }
         }
 
-        private void ValidateParamAreEqual(TIn entity, ValidationResult validationResult)
+        private void ValidateParamAreEqual(TOut value, ValidationResult validationResult)
         {
-            var value = _singleParam.Invoke(entity);
-
             if(Comparer<TOut>.Default.Compare(value, EqualObject) != 0) {
-                validationResult.AddValidation(_singleParam.Target.ToString(), "Are not equal");
+                validationResult.AddValidation(ParamName, "Are not equal");
             }
         }
     }
