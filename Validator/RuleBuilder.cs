@@ -40,6 +40,14 @@ namespace Validator.Validator
             return this;
         }
 
+        public RuleBuilder<TIn> AreEqual(object value)
+        {
+            Rule.CheckAreEqual = true;
+            Rule.EqualObject = value;
+
+            return this;
+        }
+
         public static RuleBuilder<TIn> RuleFor(Expression<Func<TIn, object>> func)
         {
             return new RuleBuilder<TIn>(func);

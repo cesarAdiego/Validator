@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Validator.Validator
 {
@@ -7,21 +8,18 @@ namespace Validator.Validator
     {
         public List<Rule<TEntity, object>> Rules { get; set; }
 
-        private TEntity _entity { get; set; }
-
-        public AbstractValidator(TEntity entity) 
+        public AbstractValidator() 
         {
             Rules = new List<Rule<TEntity, object>>();
-            _entity = entity;
         }
 
-        public ValidationResult Validate()
+        public ValidationResult Validate(TEntity entity)
         {
             var validationResult = new ValidationResult();
 
             foreach(var rule in Rules)
             {
-                var result = rule.Validate(_entity);
+                var result = rule.Validate(entity);
 
                 validationResult.MergeWith(result);
             }
@@ -32,6 +30,11 @@ namespace Validator.Validator
         public void AddRule(Rule<TEntity, object> rule)
         {
             Rules.Add(rule);
+        }
+
+        public RuleBuilder<TEntity> RuleFor(Expression<Func<TEntity, object>> func)
+        {
+            return RuleBuilder<TEntity>.RuleFor(func);
         }
     }
 }
