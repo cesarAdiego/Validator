@@ -2,16 +2,16 @@
 
 namespace Validator.Validator.RuleConditions
 {
-    public class EqualCondition<TEntity> : IRuleCondition<TEntity>
+    public class EqualCondition<TEntity> : RuleConditionBase<TEntity>, IRuleCondition<TEntity>
     {
 
-        public ValidationResult Validate(TEntity originalValue, TEntity valueToCompare, string parameterName)
+        public ValidationResult Validate(TEntity originalValue)
         {
             var validationResult = new ValidationResult();
 
-            if(EqualityComparer<TEntity>.Default.Equals(originalValue, valueToCompare))
+            if(EqualityComparer<TEntity>.Default.Equals(originalValue, ValueToCompare))
             {
-                validationResult.AddValidation(parameterName, "Are not equal");
+                validationResult.AddValidation(ParameterName, "Are not equal");
             }
 
             return validationResult;

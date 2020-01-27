@@ -2,6 +2,6 @@
 {
     public interface IRuleCondition<T>
     {
-        public ValidationResult Validate(T originalValue, T valueToCompare, string parameterName);
+        public ValidationResult Validate(T originalValue);
     }
 }

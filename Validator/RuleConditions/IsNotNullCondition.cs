@@ -2,15 +2,15 @@
 
 namespace Validator.Validator.RuleConditions
 {
-    public class LesserOrEqualThanCondition<TEntity> : RuleConditionBase<TEntity>, IRuleCondition<TEntity>
+    public class IsNotNullCondition<TEntity> : RuleConditionBase<TEntity>, IRuleCondition<TEntity>
     {
         public ValidationResult Validate(TEntity originalValue)
         {
             var validationResult = new ValidationResult();
 
-            if(!(Comparer<TEntity>.Default.Compare(originalValue, ValueToCompare) <= 0))
+            if(!EqualityComparer<TEntity>.Default.Equals(originalValue, default))
             {
-                validationResult.AddValidation(ParameterName, "Is not lesser or equal than");
+                validationResult.AddValidation(ParameterName, "Is not null");
             }
 
             return validationResult;
