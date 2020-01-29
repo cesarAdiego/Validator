@@ -17,7 +17,18 @@ namespace Validator.Validator
             {
                 if(_paramName == null)
                 {
-                    _paramName = (_singleParam.Body as MemberExpression).Member.Name;
+                    var member = _singleParam.Body as MemberExpression;
+
+                    if (member != null)
+                    {
+                        _paramName = member.Member.Name;
+                    }
+                    else
+                    {
+                        var expression = _singleParam.Body as UnaryExpression;
+                        var operand = expression.Operand as MemberExpression;
+                        _paramName = operand.Member.Name;
+                    }
                 }
 
                 return _paramName;
