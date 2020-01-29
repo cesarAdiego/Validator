@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using Validator.Validator.RuleConditions;
 
 namespace Validator.Validator
 {
@@ -19,31 +20,85 @@ namespace Validator.Validator
 
         public RuleBuilder<TIn> IsNull()
         {
-            Rule.CheckIfNull = true;
+            var condition = new IsNullCondition<object>();
+            condition.ParameterName = Rule.ParameterName;
+            Rule.Conditions.Add(condition);
+
+            return this;
+        }
+
+        public RuleBuilder<TIn> IsNotNull()
+        {
+            var condition = new IsNotNullCondition<object>();
+            condition.ParameterName = Rule.ParameterName;
+
+            Rule.Conditions.Add(condition);
 
             return this;
         }
 
         public RuleBuilder<TIn> IsBiggerThan(object value)
         {
-            Rule.CheckIsBiggerThan = true;
-            Rule.BiggerThanObject = value;
+            var condition = new BiggerThanCondition<object>();
+            condition.ValueToCompare = value;
+            condition.ParameterName = Rule.ParameterName;
+
+            Rule.Conditions.Add(condition);
+
+            return this;
+        }
+
+        public RuleBuilder<TIn> IsBiggerOrEqualThan(object value)
+        {
+            var condition = new BiggerOrEqualThanCondition<object>();
+            condition.ValueToCompare = value;
+            condition.ParameterName = Rule.ParameterName;
+
+            Rule.Conditions.Add(condition);
 
             return this;
         }
 
         public RuleBuilder<TIn> IsLesserThan(object value)
         {
-            Rule.CheckIsLesserThan = true;
-            Rule.LesserThanObject = value;
+            var condition = new LesserThanCondition<object>();
+            condition.ValueToCompare = value;
+            condition.ParameterName = Rule.ParameterName;
+
+            Rule.Conditions.Add(condition);
+
+            return this;
+        }
+
+        public RuleBuilder<TIn> IsLesserOrEqualThan(object value)
+        {
+            var condition = new LesserOrEqualThanCondition<object>();
+            condition.ValueToCompare = value;
+            condition.ParameterName = Rule.ParameterName;
+
+            Rule.Conditions.Add(condition);
 
             return this;
         }
 
         public RuleBuilder<TIn> AreEqual(object value)
         {
-            Rule.CheckAreEqual = true;
-            Rule.EqualObject = value;
+            var condition = new EqualCondition<object>();
+            condition.ValueToCompare = value;
+            condition.ParameterName = Rule.ParameterName;
+
+            Rule.Conditions.Add(condition);
+
+            return this;
+        }
+
+        public RuleBuilder<TIn> AreNotEqual(object value)
+        {
+            var condition = new NotEqualCondition<object>();
+            condition.ValueToCompare = value;
+            condition.ParameterName = Rule.ParameterName;
+
+            Rule.Conditions.Add(condition);
 
             return this;
         }

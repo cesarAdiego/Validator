@@ -8,9 +8,9 @@ namespace Validator.Validator.RuleConditions
         {
             var validationResult = new ValidationResult();
 
-            if(Comparer<TEntity>.Default.Compare(originalValue, ValueToCompare) != 0)
+            if(Comparer<TEntity>.Default.Compare(originalValue, ValueToCompare) == 0)
             {
-                validationResult.AddValidation(ParameterName, "Are not equal");
+                validationResult.AddValidation(ParameterName, "Are equal");
             }
 
             return validationResult;

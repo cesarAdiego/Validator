@@ -8,9 +8,9 @@ namespace Validator.Validator.RuleConditions
         {
             var validationResult = new ValidationResult();
 
-            if(EqualityComparer<TEntity>.Default.Equals(originalValue, default))
+            if(!EqualityComparer<TEntity>.Default.Equals(originalValue, default))
             {
-                validationResult.AddValidation(ParameterName, "Is null");
+                validationResult.AddValidation(ParameterName, "Is not null");
             }
 
             return validationResult;
