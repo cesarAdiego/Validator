@@ -20,8 +20,8 @@ namespace Validator.Validator
 
         public RuleBuilder<TIn> IsNull()
         {
-            var condition = new IsNullCondition<object>();
-            condition.ParameterName = Rule.ParameterName;
+            var condition = new IsNullCondition<object>(Rule.ParameterName);
+            
             Rule.Conditions.Add(condition);
 
             return this;
@@ -29,9 +29,8 @@ namespace Validator.Validator
 
         public RuleBuilder<TIn> IsNotNull()
         {
-            var condition = new IsNotNullCondition<object>();
-            condition.ParameterName = Rule.ParameterName;
-
+            var condition = new IsNotNullCondition<object>(Rule.ParameterName);
+            
             Rule.Conditions.Add(condition);
 
             return this;
@@ -39,10 +38,8 @@ namespace Validator.Validator
 
         public RuleBuilder<TIn> IsBiggerThan(object value)
         {
-            var condition = new BiggerThanCondition<object>();
-            condition.ValueToCompare = value;
-            condition.ParameterName = Rule.ParameterName;
-
+            var condition = new BiggerThanCondition<object>(value, Rule.ParameterName);
+            
             Rule.Conditions.Add(condition);
 
             return this;
@@ -50,10 +47,8 @@ namespace Validator.Validator
 
         public RuleBuilder<TIn> IsBiggerOrEqualThan(object value)
         {
-            var condition = new BiggerOrEqualThanCondition<object>();
-            condition.ValueToCompare = value;
-            condition.ParameterName = Rule.ParameterName;
-
+            var condition = new BiggerOrEqualThanCondition<object>(value, Rule.ParameterName);
+            
             Rule.Conditions.Add(condition);
 
             return this;
@@ -61,10 +56,8 @@ namespace Validator.Validator
 
         public RuleBuilder<TIn> IsLesserThan(object value)
         {
-            var condition = new LesserThanCondition<object>();
-            condition.ValueToCompare = value;
-            condition.ParameterName = Rule.ParameterName;
-
+            var condition = new LesserThanCondition<object>(value, Rule.ParameterName);
+            
             Rule.Conditions.Add(condition);
 
             return this;
@@ -72,10 +65,8 @@ namespace Validator.Validator
 
         public RuleBuilder<TIn> IsLesserOrEqualThan(object value)
         {
-            var condition = new LesserOrEqualThanCondition<object>();
-            condition.ValueToCompare = value;
-            condition.ParameterName = Rule.ParameterName;
-
+            var condition = new LesserOrEqualThanCondition<object>(value, Rule.ParameterName);
+            
             Rule.Conditions.Add(condition);
 
             return this;
@@ -83,10 +74,8 @@ namespace Validator.Validator
 
         public RuleBuilder<TIn> AreEqual(object value)
         {
-            var condition = new EqualCondition<object>();
-            condition.ValueToCompare = value;
-            condition.ParameterName = Rule.ParameterName;
-
+            var condition = new EqualCondition<object>(value, Rule.ParameterName);
+            
             Rule.Conditions.Add(condition);
 
             return this;
@@ -94,10 +83,8 @@ namespace Validator.Validator
 
         public RuleBuilder<TIn> AreNotEqual(object value)
         {
-            var condition = new NotEqualCondition<object>();
-            condition.ValueToCompare = value;
-            condition.ParameterName = Rule.ParameterName;
-
+            var condition = new NotEqualCondition<object>(value, Rule.ParameterName);
+            
             Rule.Conditions.Add(condition);
 
             return this;
