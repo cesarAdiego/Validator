@@ -90,6 +90,15 @@ namespace Validator.Validator
             return this;
         }
 
+        public RuleBuilder<TIn> Must(Func<object, bool> f)
+        {
+            var condition = new MustCondition<object>(f, Rule.ParameterName);
+
+            Rule.Conditions.Add(condition);
+
+            return this;
+        }
+
         public static RuleBuilder<TIn> RuleFor(Expression<Func<TIn, object>> func)
         {
             return new RuleBuilder<TIn>(func);
